@@ -34,6 +34,7 @@ public class ImageSingleChooseActivity extends Activity {
     private static final int REQUEST_CAMERA = 0x1000;
     private static final int REQUEST_CROP = 0x1001;
     private static final int REQUEST_GALLERY = 0x1002;
+    public static final String SPECIAL_CUSTOM_URL_HEADER = "com.publishgallery.custom.auth.";
     private TextView gallery;
     private TextView take_pic;
     private TextView cancle;
@@ -435,10 +436,26 @@ public class ImageSingleChooseActivity extends Activity {
     }
 
     private static boolean assetIsGallery(Uri uri) {
-        if (uri != null && uri.getScheme().equals("content") && uri.getAuthority().equals("media")) {
+        if (uri != null && assetSchme(uri) &&
+                assetPhoneAuth(uri)) {
             return true;
         }
         return false;
+    }
+
+    private static boolean assetSchme(Uri uri) {
+        String schme = uri.getScheme();
+        return schme.equals("content") || schme.equals("file");
+    }
+
+    /**
+     * 如果是以com.publishgallery.custom.auth这个字符串开头，那么表示不是图库的照片
+     * @param uri
+     * @return
+     */
+    private static boolean assetPhoneAuth(Uri uri) {
+        String authorties = uri.getAuthority();
+        return !authorties.startsWith(SPECIAL_CUSTOM_URL_HEADER);
     }
 
     /**

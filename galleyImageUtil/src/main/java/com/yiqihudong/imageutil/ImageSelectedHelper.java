@@ -18,6 +18,7 @@ import com.yiqihudong.imageutil.callback.SelectPicCallback;
 import com.yiqihudong.imageutil.utils.Constant;
 import com.yiqihudong.imageutil.view.ImageChooseAndCropUtil;
 import com.yiqihudong.imageutil.view.ImageCropCallback;
+import com.yiqihudong.imageutil.view.ImageSingleChooseActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -338,9 +339,11 @@ public class ImageSelectedHelper {
     }
 
     private static void requestPermission(Context context, final Callback callback) {
-        if (TextUtils.isEmpty(ImageChooseAndCropUtil.getInstance(context).getAuthorities())) {
+        if (TextUtils.isEmpty(ImageChooseAndCropUtil.getInstance(context).getAuthorities()) ||
+                !ImageChooseAndCropUtil.getInstance(context).getAuthorities().startsWith(ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER)) {
             throw new NullPointerException("你必须在application的oncreate方法调用ImageSelectHelper.initProviderAuth(String authorties)初始化," +
-                    "authorties是你自定义的FileProvider的子类的authorties属性,FileProvider的xml配置请自行查询文档");
+                    "authorties是你自定义的FileProvider的子类的authorties属性,FileProvider的xml配置请自行查询文档,并且authorties" +
+                    "要以ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER做开头字符串,后面可以自己拼接");
         }
         AcpOptions options = new AcpOptions.Builder()
                 .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -449,6 +452,12 @@ public class ImageSelectedHelper {
         return valid;
     }
 
+    /**
+     * authorties是你自定义的FileProvider的子类的authorties属性,FileProvider的xml配置请自行查询文档,并且authorties
+     "要以ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER做开头字符串,后面可以自己拼接
+     * @param context
+     * @param authorites
+     */
     public static void initProviderAuth(Context context,String authorites){
         ImageChooseAndCropUtil.getInstance(context).setAuthorities(authorites);
     }

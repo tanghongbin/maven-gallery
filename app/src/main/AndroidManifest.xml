@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:authorities="com.yiqihudong.myutils.special.main"
+            android:authorities="com.publishgallery.custom.auth.com.yiqihudong.myutils.special.main"
             android:exported="false"
             android:grantUriPermissions="true"
             android:name=".CustomFileProvider">
