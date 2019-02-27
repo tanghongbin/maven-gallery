@@ -28,6 +28,51 @@ import java.util.jar.Manifest;
 /**
  * Created by tanghongbin on 2016/12/26.
  * 图片选择的帮助类
+ * !!!!!!!!!!使用框架前必读此说明
+ * 1.上下文环境的初始化 - 在application的onCreate方法中调用
+ *
+ * ContextManager.init(this)
+ *
+ *
+ *
+ * 2.可使用的文件地址授权，在application的onCreate方法中调用
+ *
+ * ImageSelectedHelper.initProviderAuth(this,authroies)方法
+ *
+ *
+ * 授权的authroies必须以ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER为前缀
+ * 再加上自定义的字符串如：
+ *
+ *        authroies = ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER
+ *             + (自定义字符串如) com.example
+ *
+ *
+ *
+ * 3.同时还必须要在app主工程的AndroidManifest.xml文件下进行如下声明,
+ *
+ *
+ *      < provider
+ *         android:name=".module.CustomFileProvider"
+ *         android:authorities="com.publishgallery.custom.auth.mgbapp.image"
+ *         android:exported="false"
+ *         android:grantUriPermissions="true">
+ *      < meta-data
+ *         android:name="android.support.FILE_PROVIDER_PATHS"
+ *         android:resource="@xml/file_paths">< /meta-data>
+ *      < /provider>
+ *
+ *        <provider>标签内容定义如下:
+ *           1. 这里的authorities必须和initProviderAuth()方法的authroies保持一致,
+ *             如  authroies = ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER
+ * *             + (自定义字符串如) com.example
+ * *         2.name为自定义的FileProvider的子类,是个空类，example:
+ * <p>
+ *            public class CustomFileProvider extends FileProvider {
+ * <p>
+ *           }
+ *
+ *
+ *        <meta>标签内的内容不用更改
  */
 
 public class ImageSelectedHelper {
@@ -103,13 +148,13 @@ public class ImageSelectedHelper {
         });
     }
 
-    public static void photoWall(Context context, ArrayList<String> images,int position,PhotoWallOnItemClickListener
-                                 onItemClickListener) {
-        photoWall(context, images, position,onItemClickListener,null);
+    public static void photoWall(Context context, ArrayList<String> images, int position, PhotoWallOnItemClickListener
+            onItemClickListener) {
+        photoWall(context, images, position, onItemClickListener, null);
     }
 
-    public static void photoWall(Context context, ArrayList<String> images,int position) {
-        photoWall(context, images, position,null,null);
+    public static void photoWall(Context context, ArrayList<String> images, int position) {
+        photoWall(context, images, position, null, null);
     }
 
     /**
@@ -122,13 +167,12 @@ public class ImageSelectedHelper {
         photoWall(context, images, 0);
     }
 
-    public static void selectMutiplePic(final Context context, final int maxCount, final ArrayList<String> alreadySelectList,final SelectPicCallback selectPicCallback) {
-        selectMutiplePic(context,maxCount,alreadySelectList,null,selectPicCallback);
+    public static void selectMutiplePic(final Context context, final int maxCount, final ArrayList<String> alreadySelectList, final SelectPicCallback selectPicCallback) {
+        selectMutiplePic(context, maxCount, alreadySelectList, null, selectPicCallback);
     }
 
     /**
      * 从图库选择多张照片
-     *
      *
      * @param maxCount          选择照片的最大数量
      * @param alreadySelectList 刚刚是否已经从图片选择的照片，可为null
@@ -147,7 +191,7 @@ public class ImageSelectedHelper {
                     intent.putExtra("image_max", maxCount);
                 }
                 if (options != null) {
-                    intent.putExtra("options",options);
+                    intent.putExtra("options", options);
                 }
                 if (alreadySelectList != null && alreadySelectList.size() > 0) {
                     intent.putExtra(Constant.ALREADY_SELECT_KEY, alreadySelectList);
@@ -198,9 +242,9 @@ public class ImageSelectedHelper {
             @Override
             public void onSuccess(Object o) {
                 if (isNeedCrop) {
-                    ImageChooseAndCropUtil.getInstance(context).cameraCrop(context,callback,options);
+                    ImageChooseAndCropUtil.getInstance(context).cameraCrop(context, callback, options);
                 } else {
-                    ImageChooseAndCropUtil.getInstance(context).camera(context,callback);
+                    ImageChooseAndCropUtil.getInstance(context).camera(context, callback);
                 }
 
             }
@@ -228,7 +272,7 @@ public class ImageSelectedHelper {
      * @param callback   回调
      */
     public static void camera(final Context context, final boolean isNeedCrop, final ImageCropCallback callback) {
-        camera(context,isNeedCrop,null,callback);
+        camera(context, isNeedCrop, null, callback);
     }
 
     /**
@@ -253,9 +297,9 @@ public class ImageSelectedHelper {
             @Override
             public void onSuccess(Object o) {
                 if (isNeedCrop) {
-                    ImageChooseAndCropUtil.getInstance(context).chooseCropPic(context,callback,options);
+                    ImageChooseAndCropUtil.getInstance(context).chooseCropPic(context, callback, options);
                 } else {
-                    ImageChooseAndCropUtil.getInstance(context).choosePic(context,callback);
+                    ImageChooseAndCropUtil.getInstance(context).choosePic(context, callback);
                 }
             }
 
@@ -276,7 +320,7 @@ public class ImageSelectedHelper {
      * @param callback
      */
     public static void selectSinglePic(final Context context, final boolean isNeedCrop, final ImageCropCallback callback) {
-        selectSinglePic(context,isNeedCrop,null,callback);
+        selectSinglePic(context, isNeedCrop, null, callback);
     }
 
     /**
@@ -298,7 +342,7 @@ public class ImageSelectedHelper {
      * @param callback
      */
     public static void selectedSingleImageFromGallery(final Context context, final boolean isNeedCrop, final ImageCropCallback callback) {
-        selectedSingleImageFromGallery(context,isNeedCrop,null,callback);
+        selectedSingleImageFromGallery(context, isNeedCrop, null, callback);
     }
 
     /**
@@ -313,9 +357,9 @@ public class ImageSelectedHelper {
             @Override
             public void onSuccess(Object o) {
                 if (isNeedCrop) {
-                    ImageChooseAndCropUtil.getInstance(context).selectedImageFromGalleryCrop(context,callback,options);
+                    ImageChooseAndCropUtil.getInstance(context).selectedImageFromGalleryCrop(context, callback, options);
                 } else {
-                    ImageChooseAndCropUtil.getInstance(context).selectedImageFromGallery(context,callback);
+                    ImageChooseAndCropUtil.getInstance(context).selectedImageFromGallery(context, callback);
                 }
             }
 
@@ -369,22 +413,23 @@ public class ImageSelectedHelper {
 
     /**
      * 是否需要下载
+     *
      * @param context
-     * @param path 本地地址或者网络地址
-     *  是否需要下载
+     * @param path        本地地址或者网络地址
+     *                    是否需要下载
      * @param cropOptions
      * @param callback
      */
     public static void crop(final Context context, final String path,
                             final CropOptions cropOptions
-    , final ImageCropCallback callback) {
+            , final ImageCropCallback callback) {
         requestPermission(context, new Callback() {
             @Override
             public void onSuccess(Object o) {
-                if (!assetPathValid(context,false,path)){
+                if (!assetPathValid(context, false, path)) {
                     return;
                 }
-                ImageChooseAndCropUtil.getInstance(context).cropPic(context,path,callback,false,cropOptions);
+                ImageChooseAndCropUtil.getInstance(context).cropPic(context, path, callback, false, cropOptions);
             }
 
             @Override
@@ -399,9 +444,10 @@ public class ImageSelectedHelper {
 
     /**
      * 是否需要下载
+     *
      * @param context
-     * @param path 本地地址或者网络地址
-     *  是否需要下载
+     * @param path     本地地址或者网络地址
+     *                 是否需要下载
      * @param callback
      */
     public static void crop(final Context context, final String path
@@ -409,10 +455,10 @@ public class ImageSelectedHelper {
         requestPermission(context, new Callback() {
             @Override
             public void onSuccess(Object o) {
-                if (!assetPathValid(context,false,path)){
+                if (!assetPathValid(context, false, path)) {
                     return;
                 }
-                ImageChooseAndCropUtil.getInstance(context).cropPic(context,path,callback,false,null);
+                ImageChooseAndCropUtil.getInstance(context).cropPic(context, path, callback, false, null);
             }
 
             @Override
@@ -427,38 +473,40 @@ public class ImageSelectedHelper {
 
     /**
      * 验证路径是否合法
-     * @return
+     *
      * @param context
      * @param isNeedDownload
      * @param path
+     * @return
      */
     private static boolean assetPathValid(Context context, boolean isNeedDownload, String path) {
         boolean valid = false;
-        if (!TextUtils.isEmpty(path)){
-            if (isNeedDownload){
-                if (path.startsWith("http:") || path.startsWith("https:")){
+        if (!TextUtils.isEmpty(path)) {
+            if (isNeedDownload) {
+                if (path.startsWith("http:") || path.startsWith("https:")) {
                     valid = true;
                 }
-            }else {
+            } else {
                 File file = new File(path);
-                if (file != null && file.exists()){
+                if (file != null && file.exists()) {
                     valid = true;
                 }
             }
         }
-        if (valid == false){
-            Toast.makeText(context,"路径不合法",Toast.LENGTH_LONG).show();
+        if (valid == false) {
+            Toast.makeText(context, "路径不合法", Toast.LENGTH_LONG).show();
         }
         return valid;
     }
 
     /**
      * authorties是你自定义的FileProvider的子类的authorties属性,FileProvider的xml配置请自行查询文档,并且authorties
-     "要以ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER做开头字符串,后面可以自己拼接
+     * "要以ImageSingleChooseActivity.SPECIAL_CUSTOM_URL_HEADER做开头字符串,后面可以自己拼接
+     *
      * @param context
      * @param authorites
      */
-    public static void initProviderAuth(Context context,String authorites){
+    public static void initProviderAuth(Context context, String authorites) {
         ImageChooseAndCropUtil.getInstance(context).setAuthorities(authorites);
     }
 

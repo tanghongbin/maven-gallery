@@ -47,7 +47,7 @@ publish {
     userOrg = 'tanghongbin'//bintray.com用户名
     groupId = 'com.yiqihudong'//jcenter上的路径
     artifactId = 'image-util'//项目名称
-    publishVersion = '2.5.5'//版本号
+    publishVersion = '2.5.7'//版本号
     desc = '更新了图库和图片墙进入的方式，更加直观,修复图片选择器的bug,'//描述，不重要
     website = 'https://github.com/tanghongbin/galleryimageUtil'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
 }

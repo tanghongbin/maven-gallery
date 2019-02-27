@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -107,9 +108,9 @@ public class PhotoWallAdapter extends PagerAdapter {
         }
         Options options = new Options(WindowUtil.getDisplayMetrics(context).widthPixels,
                 WindowUtil.getDisplayMetrics(context).heightPixels);
-        ImageLoaderUtil.downLoadImageLoader(uri, options, new RequestListener<BitmapDrawable>() {
+        ImageLoaderUtil.downLoadImageLoader(uri, options, new RequestListener<Drawable>() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<BitmapDrawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 if (getErrorListener() != null){
                     getErrorListener().loadError();
                 }else {
@@ -121,11 +122,12 @@ public class PhotoWallAdapter extends PagerAdapter {
             }
 
             @Override
-            public boolean onResourceReady(BitmapDrawable resource, Object model, Target<BitmapDrawable> target, DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 Log.i(PhotoWallAdapter.class.getName(),"图片加载成功");
                 photoView.setImageDrawable(resource);
                 return false;
             }
+
         });
 
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
