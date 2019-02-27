@@ -1,5 +1,8 @@
 此工具库可提供图片的多选和单选
 
+compile 'com.yiqihudong:image-util:2.5.7'
+
+额外提供基础库： 'com.yiqihudong:base_library:2.3.6'
 
 /**
  * Created by tanghongbin on 2016/12/26.
